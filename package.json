@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "p":"npm publish .",
+    "start":"./node_modules/.bin/nodemon app.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
