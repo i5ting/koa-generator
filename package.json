@@ -17,7 +17,7 @@
     "url": "git+https://github.com/base-n/koa.git"
   },
   "author": "i5ting",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/base-n/koa/issues"
   },
