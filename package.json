@@ -1,6 +1,6 @@
 {
   "name": "koa-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "koa generator",
   "main": "index.js",
   "scripts": {
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/base-n/koa.git"
+    "url": "git+https://github.com/base-n/koa-generator.git"
   },
   "author": "i5ting",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/base-n/koa/issues"
+    "url": "https://github.com/base-n/koa-generator/issues"
   },
-  "homepage": "https://github.com/base-n/koa#readme",
+  "homepage": "https://github.com/base-n/koa-generator#readme",
   "dependencies": {
     "commander": "2.7.1",
     "mkdirp": "0.5.1",
