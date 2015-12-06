@@ -1,60 +1,39 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var app = require('koa')();
+var koa = require('koa-router')();
+var logger = require('koa-logger');
+var json = require('koa-json');
+var views = require('koa-views');
 
-var routes = require('./routes/index');
+var index = require('./routes/index');
 var users = require('./routes/users');
 
-var app = express();
+// global middlewares
+app.use(views('views', {
+  root: __dirname + '/views',
+  default: 'jade'
+}));
+app.use(require('koa-bodyparser')());
+app.use(json());
+app.use(logger());
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', '{views}');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());{css}
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
-app.use('/users', users);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function *(next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  console.log('%s %s - %s', this.method, this.url, ms);
 });
 
-// error handlers
+app.use(require('koa-static')(__dirname + '/public'));
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
+// routes definition
+koa.use('/', index.routes(), index.allowedMethods());
+koa.use('/users', users.routes(), users.allowedMethods());
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+// mount root routes  
+app.use(koa.routes());
+
+app.on('error', function(err, ctx){
+  log.error('server error', err, ctx);
 });
-
 
 module.exports = app;
