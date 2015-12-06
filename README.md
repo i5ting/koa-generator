@@ -52,6 +52,8 @@ This generator can also be further configured with the following command line fl
         --git           add .gitignore
     -f, --force         force on non-empty directory
 
+目前选项还没有完全实现
+
 ## License
 
 [MIT](LICENSE)
