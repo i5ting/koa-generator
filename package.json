@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "p":"npm publish .",
-    "start":"./node_modules/.bin/nodemon app.js ",
+    "p": "npm publish .",
+    "start": "./node_modules/.bin/nodemon app.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +19,12 @@
   },
   "homepage": "https://github.com/base-n/koa#readme",
   "dependencies": {
+    "co": "^4.6.0",
+    "jade": "^1.11.0",
     "koa": "^1.1.2",
-    "koa-router": "^5.3.0"
+    "koa-router": "^5.3.0",
+    "koa-static": "^1.5.2",
+    "koa-views": "^3.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.8.1"

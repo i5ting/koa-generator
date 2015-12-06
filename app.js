@@ -11,9 +11,13 @@ app.use(function *(next){
   console.log('%s %s - %s', this.method, this.url, ms);
 });
 
+app.use(require('koa-static')(__dirname + '/public'));
+
 koa.use('/', index.routes(), index.allowedMethods());
 koa.use('/users', users.routes(), users.allowedMethods());
 
 app.use(koa.routes());
 
 app.listen(3000);
+
+console.log('listening on port 3000');
