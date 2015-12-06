@@ -1,7 +1,9 @@
 # koa-generator
 
-https://www.npmjs.com/package/koa-generator
+http://koajs.com/
 
+
+## Stacks
 
 - https://github.com/alexmingoia/koa-router
 - https://github.com/queckezz/koa-views
