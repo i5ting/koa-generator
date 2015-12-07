@@ -1,8 +1,9 @@
-var app = require('koa')();
-var koa = require('koa-router')();
-var logger = require('koa-logger');
-var json = require('koa-json');
-var views = require('koa-views');
+var app = require('koa')()
+  , koa = require('koa-router')()
+  , logger = require('koa-logger')
+  , json = require('koa-json')
+  , views = require('koa-views')
+  , onerror = require('koa-onerror');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
