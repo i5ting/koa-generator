@@ -202,7 +202,7 @@ router.get('/2', function *(next) {
 - [Mount other Koa applications or middleware to a given pathname](https://github.com/koajs/mount)
 - [Middleware composition utility](https://github.com/koajs/compose)
 - [The ultimate generator based flow-control goodness for nodejs (supports thunks, promises, etc)](https://github.com/tj/co)
-- [rest api](- https://github.com/zedgu/surface)
+- [rest api](https://github.com/zedgu/surface)
 
 
 提前报个料moajs很快会放出一个基于koa的版本来
