@@ -11,11 +11,22 @@ http://koajs.com/
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
+## Features
+
+- Express-style
+- Support koa 1.x
+- Support koa 2.x（todo）
+
 ## Installation
 
 ```sh
 $ npm install -g koa-generator
 ```
+
+with 2 commands
+
+- koa (Support koa 1.x)
+- koa2 (Support koa 2.x todo)
 
 ## Quick Start
 
