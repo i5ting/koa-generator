@@ -14,7 +14,7 @@ http://koajs.com/
 ## Features
 
 - Express-style
-- Support koa 1.x
+- Support koa 1.x（已支持）
 - Support koa 2.x（已支持，依赖babel）
 
 ## Installation
@@ -93,6 +93,12 @@ This generator can also be further configured with the following command line fl
     -f, --force         force on non-empty directory
 
 目前选项还没有完全实现
+
+## Git Branch Details
+
+- master = generator
+- tpl 是koa 1.x模板
+- tpl_2.x 是koa 2.x模板
 
 ## License
 
