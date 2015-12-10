@@ -1,6 +1,6 @@
 {
   "name": "koa-generator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "koa generator",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,8 @@
   "main": "bin/koa",
   "preferGlobal": true,
   "bin": {
-    "koa": "./bin/koa"
+    "koa": "./bin/koa",
+    "koa2": "./bin/koa2"
   },
   "repository": {
     "type": "git",
