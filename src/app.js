@@ -72,6 +72,11 @@ app.use(convert(views('views', {
   default: 'jade'
 })));
 
+app.use(co.wrap(function *(ctx, next){
+  ctx.render = co.wrap(ctx.render);
+  yield next();
+}));
+
 // logger
 
 app.use(co.wrap(function *(ctx, next){
