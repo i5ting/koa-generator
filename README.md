@@ -15,7 +15,7 @@ http://koajs.com/
 
 - Express-style
 - Support koa 1.x
-- Support koa 2.x（todo）
+- Support koa 2.x（已支持，依赖babel）
 
 ## Installation
 
@@ -26,9 +26,9 @@ $ npm install -g koa-generator
 with 2 commands
 
 - koa (Support koa 1.x)
-- koa2 (Support koa 2.x todo)
+- koa2 (Support koa 2.x)
 
-## Quick Start
+## Quick Start 1.x
 
 The quickest way to get started with koa is to utilize the executable `koa(1)` to generate an application as shown below:
 
@@ -36,6 +36,35 @@ Create the app:
 
 ```bash
 $ koa /tmp/foo && cd /tmp/foo
+```
+
+Install dependencies:
+
+```bash
+$ npm install
+```
+
+Rock and Roll
+
+```bash
+$ npm start
+```
+
+## Quick Start 2.x
+
+pre
+
+```
+npm install -g babel 
+npm install -g babel-cli
+```
+
+then
+
+Create the app:
+
+```bash
+$ koa2 /tmp/foo && cd /tmp/foo
 ```
 
 Install dependencies:

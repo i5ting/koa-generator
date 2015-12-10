@@ -110,55 +110,69 @@ function createApplication(app_name, path) {
   var compass = loadTemplate('css/style.scss');
   var sass = loadTemplate('css/style.sass');
 
+  
   mkdir(path, function(){
-    mkdir(path + '/public');
-    mkdir(path + '/public/javascripts');
-    mkdir(path + '/public/images');
-    mkdir(path + '/public/stylesheets', function(){
+    mkdir(path + '/src/');
+    mkdir(path + '/app', function(){
+      mkdir(path + '/app/bin', function(){
+        www = www.replace('{name}', app_name);
+        write(path + '/app/bin/www', www, 0755);
+        complete();
+      });
+    });
+    
+    mkdir(path + '/app/public');
+    mkdir(path + '/app/public/javascripts');
+    mkdir(path + '/app/public/images');
+    mkdir(path + '/app/public/stylesheets', function(){
       switch (program.css) {
         case 'less':
-          write(path + '/public/stylesheets/style.less', less);
+          write(path + '/app/public/stylesheets/style.less', less);
           break;
         case 'stylus':
-          write(path + '/public/stylesheets/style.styl', stylus);
+          write(path + '/app/public/stylesheets/style.styl', stylus);
           break;
         case 'compass':
-          write(path + '/public/stylesheets/style.scss', compass);
+          write(path + '/app/public/stylesheets/style.scss', compass);
           break;
         case 'sass':
-          write(path + '/public/stylesheets/style.sass', sass);
+          write(path + '/app/public/stylesheets/style.sass', sass);
           break;
         default:
-          write(path + '/public/stylesheets/style.css', css);
+          write(path + '/app/public/stylesheets/style.css', css);
       }
       complete();
     });
-
-    mkdir(path + '/routes', function(){
-      write(path + '/routes/index.js', index);
-      write(path + '/routes/users.js', users);
-      complete();
+  
+    mkdir(path + '/src', function(){
+      write(path + '/src/app.js', app);
+      mkdir(path + '/src/routes', function(){
+        write(path + '/src/routes/index.js', index);
+        write(path + '/src/routes/users.js', users);
+        complete();
+      });
     });
+    
 
-    mkdir(path + '/views', function(){
+    mkdir(path + '/app/views', function(){
       switch (program.template) {
         case 'ejs':
-          copy_template('ejs/index.ejs', path + '/views/index.ejs');
-          copy_template('ejs/error.ejs', path + '/views/error.ejs');
+          copy_template('ejs/index.ejs', path + '/app/views/index.ejs');
+          copy_template('ejs/error.ejs', path + '/app/views/error.ejs');
           break;
         case 'jade':
-          copy_template('jade/index.jade', path + '/views/index.jade');
-          copy_template('jade/layout.jade', path + '/views/layout.jade');
-          copy_template('jade/error.jade', path + '/views/error.jade');
+          copy_template('jade/index.jade', path + '/app/views/index.jade');
+          copy_template('jade/layout.jade', path + '/app/views/layout.jade');
+          copy_template('jade/error.jade', path + '/app/views/error.jade');
           break;
         case 'hjs':
-          copy_template('hogan/index.hjs', path + '/views/index.hjs');
-          copy_template('hogan/error.hjs', path + '/views/error.hjs');
+          copy_template('hogan/index.hjs', path + '/app/views/index.hjs');
+          copy_template('hogan/error.hjs', path + '/app/views/error.hjs');
           break;
         case 'hbs':
-          copy_template('hbs/index.hbs', path + '/views/index.hbs');
-          copy_template('hbs/layout.hbs', path + '/views/layout.hbs');
-          copy_template('hbs/error.hbs', path + '/views/error.hbs');
+          copy_template('hbs/index.hbs', path + '/app/views/index.hbs');
+          copy_template('hbs/layout.hbs', path + '/app/views/layout.hbs');
+          copy_template('hbs/error.hbs', path + '/app/views/error.hbs');
           break;
       }
       complete();
@@ -190,19 +204,27 @@ function createApplication(app_name, path) {
         name: app_name
       , version: '0.0.0'
       , private: true
-      , scripts: { start: 'node ./bin/www' }
+      , scripts: {    
+        "c":"babel -d app/ src",
+        "start": "npm run c && ./node_modules/.bin/nodemon app/bin/www",
+        "test": "echo \"Error: no test specified\" && exit 1"
+      }
       , dependencies: {
           "co": "^4.6.0",
           "debug": "^2.2.0",
           "jade": "^1.11.0",
-          "koa": "^1.1.2",
+          "koa": "^2.0.0-alpha.3",
           "koa-bodyparser": "^2.0.1",
+          "koa-convert": "^1.2.0",
           "koa-json": "^1.1.1",
           "koa-logger": "^1.3.0",
           "koa-onerror": "^1.2.1",
-          "koa-router": "^5.3.0",
+          "koa-router": "^7.0.0",
           "koa-static": "^1.5.2",
           "koa-views": "^3.1.0"
+      },
+      "devDependencies": {
+        "nodemon": "^1.8.1"
       }
     }
 
@@ -244,12 +266,7 @@ function createApplication(app_name, path) {
 
     // write files
     write(path + '/package.json', JSON.stringify(pkg, null, 2));
-    write(path + '/app.js', app);
-    mkdir(path + '/bin', function(){
-      www = www.replace('{name}', app_name);
-      write(path + '/bin/www', www, 0755);
-      complete();
-    });
+    
 
     if (program.git) {
       write(path + '/.gitignore', fs.readFileSync(__dirname + '/../templates2/js/gitignore', 'utf-8'));

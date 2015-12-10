@@ -1,9 +1,8 @@
 var router = require('koa-router')();
 
-router.get('/', function *(next) {
-  yield this.render('index', {
+router.get('/', function (ctx, next) {
+  ctx.render('index', {
     title: 'Hello World Koa!'
   });
-});
-
+})
 module.exports = router;

@@ -1,7 +1,7 @@
 {
   "name": "koa-generator",
-  "version": "1.0.3",
-  "description": "koa generator",
+  "version": "1.0.4",
+  "description": "fullstack koa generator for koa 1.x and 2.x",
   "main": "index.js",
   "scripts": {
     "start": "npm publish .",
