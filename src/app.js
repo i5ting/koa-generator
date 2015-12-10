@@ -1,71 +1,22 @@
-// var app = require('koa')()
-//   , koa = require('koa-router')()
-//   , logger = require('koa-logger')
-//   , json = require('koa-json')
-//   , views = require('koa-views')
-//   , onerror = require('koa-onerror');
-//
-// const Koa = require('koa');
-// const app = new Koa();
-// const co = require('co');
-var index = require('./routes/index');
-var users = require('./routes/users');
-//
-// // // global middlewares
-// // app.use(views('views', {
-// //   root: __dirname + '/views',
-// //   default: 'jade'
-// // }));
-// // app.use(require('koa-bodyparser')());
-// // app.use(json());
-// // app.use(logger());
-// //
-// // app.use(function *(next){
-// //   var start = new Date;
-// //   yield next;
-// //   var ms = new Date - start;
-// //   console.log('%s %s - %s', this.method, this.url, ms);
-// // });
-// //
-// // app.use(require('koa-static')(__dirname + '/public'));
-// //
-// // // routes definition
-// // koa.use('/', index.routes(), index.allowedMethods());
-// // koa.use('/users', users.routes(), users.allowedMethods());
-// //
-// // // mount root routes
-// // app.use(koa.routes());
-//
-//
-// // logger
-//
-// app.use(co.wrap(function *(ctx, next){
-//   const start = new Date;
-//   yield next();
-//   const ms = new Date - start;
-//   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
-// }));
-//
-// // response
-//
-// app.use(ctx => {
-//   ctx.body = 'Hello World';
-// });
-//
-//
-// app.on('error', function(err, ctx){
-//   log.error('server error', err, ctx);
-// });
-//
-// module.exports = app;
-
-
 const Koa = require('koa');
 const app = new Koa();
 const router = require('koa-router')();
 const views = require('koa-views');
 const co = require('co');
-const convert = require('koa-convert')
+const convert = require('koa-convert');
+const json = require('koa-json');
+const onerror = require('koa-onerror');
+const bodyparser = require('koa-bodyparser')();
+const logger = require('koa-logger');
+
+const index = require('./routes/index');
+const users = require('./routes/users');
+
+// middlewares
+app.use(convert(bodyparser));
+app.use(convert(json()));
+app.use(convert(logger()));
+app.use(convert(require('koa-static')(__dirname + '/public')));
 
 app.use(convert(views('views', {
   root: __dirname + '/views',
@@ -91,6 +42,10 @@ router.use('/users', users.routes(), users.allowedMethods());
 
 app.use(router.routes(), router.allowedMethods());
 // response
+
+app.on('error', function(err, ctx){
+  log.error('server error', err, ctx);
+});
 
 
 module.exports = app;
