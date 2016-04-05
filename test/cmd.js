@@ -9,10 +9,10 @@ var request = require('supertest');
 var rimraf = require('rimraf');
 var spawn = require('child_process').spawn;
 
-var binPath = path.resolve(__dirname, '../bin/express');
+var binPath = path.resolve(__dirname, '../bin/koa');
 var tempDir = path.resolve(__dirname, '../temp');
 
-describe('express(1)', function () {
+describe('koa(1)', function () {
   mocha.before(function (done) {
     this.timeout(30000);
     cleanup(done);
@@ -72,19 +72,23 @@ describe('express(1)', function () {
       var contents = fs.readFileSync(file, 'utf8');
       assert.equal(contents, '{\n'
         + '  "name": ' + JSON.stringify(path.basename(dir)) + ',\n'
-        + '  "version": "0.0.0",\n'
+        + '  "version": "0.1.0",\n'
         + '  "private": true,\n'
         + '  "scripts": {\n'
         + '    "start": "node ./bin/www"\n'
         + '  },\n'
         + '  "dependencies": {\n'
-        + '    "body-parser": "~1.13.2",\n'
-        + '    "cookie-parser": "~1.3.5",\n'
-        + '    "debug": "~2.2.0",\n'
-        + '    "express": "~4.13.1",\n'
+        + '    "co": "^4.6.0",\n'
+        + '    "debug": "^2.2.0",\n'
         + '    "jade": "~1.11.0",\n'
-        + '    "morgan": "~1.6.1",\n'
-        + '    "serve-favicon": "~2.3.0"\n'
+        + '    "koa": "^1.1.2",\n'
+        + '    "koa-bodyparser": "^2.0.1",\n'
+        + '    "koa-json": "^1.1.1",\n'
+        + '    "koa-logger": "^1.3.0",\n'
+        + '    "koa-onerror": "^1.2.1",\n'
+        + '    "koa-router": "^5.3.0",\n'
+        + '    "koa-static": "^1.5.2",\n'
+        + '    "koa-views": "^3.1.0"\n'
         + '  }\n'
         + '}');
     });
