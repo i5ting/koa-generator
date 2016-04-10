@@ -15,7 +15,7 @@ http://koajs.com/
 
 - Express-style
 - Support koa 1.x（已支持）
-- Support koa 2.x（已支持，依赖babel）
+- Support koa 2.x（已支持所有的koa中间件写法，依赖runkoa，不需要了解babel）
 
 ## Installation
 
