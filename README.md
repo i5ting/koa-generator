@@ -52,14 +52,8 @@ $ npm start
 
 ## Quick Start 2.x
 
-pre
 
-```
-npm install -g babel 
-npm install -g babel-cli
-```
-
-then
+The quickest way to get started with koa is to utilize the executable `koa2(1)` to generate an application as shown below:
 
 Create the app:
 
@@ -79,6 +73,8 @@ Rock and Roll
 $ npm start
 ```
 
+more detail see [koa2-demo](https://github.com/17koa/koa2-demo)
+
 ## Command Line Options
 
 This generator can also be further configured with the following command line flags.
@@ -96,7 +92,7 @@ This generator can also be further configured with the following command line fl
 
 ## Git Branch Details
 
-- master = generator
+- master = koa generator
 - tpl 是koa 1.x模板
 - tpl_2.x 是koa 2.x模板
 
