@@ -34,7 +34,7 @@ koa.use('/users', users.routes(), users.allowedMethods());
 app.use(koa.routes());
 
 app.on('error', function(err, ctx){
-  log.error('server error', err, ctx);
+  logger.error('server error', err, ctx);
 });
 
 module.exports = app;
