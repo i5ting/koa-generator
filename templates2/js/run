@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 var current_path = process.cwd();
 
