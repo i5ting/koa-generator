@@ -183,9 +183,6 @@ function createApplication(app_name, path) {
         app = app.replace('{css}', '');
     }
 
-    // Template support
-    app = app.replace('{views}', program.template);
-
     // package.json
     var pkg = {
         name: app_name
@@ -216,6 +213,7 @@ function createApplication(app_name, path) {
       }
     }
 
+    // Template support
     switch (program.template) {
       case 'jade':
         pkg.dependencies['jade'] = '~1.11.0';
@@ -227,10 +225,13 @@ function createApplication(app_name, path) {
         pkg.dependencies['hjs'] = '~0.0.6';
         break;
       case 'hbs':
-        pkg.dependencies['hbs'] = '~3.1.0';
+        pkg.dependencies['handlebars'] = '~4.0.5';
+        app = app.replace('\'{views}\'', '\'{views}\',\n  map: { hbs: \'handlebars\' }');
         break;
       default:
     }
+
+    app = app.replace('{views}', program.template);
 
     // CSS Engine support
     switch (program.css) {
@@ -258,7 +259,7 @@ function createApplication(app_name, path) {
     mkdir(path + '/bin', function(){
       www = www.replace('{name}', app_name);
       write(path + '/bin/www', www, 0755);
-      
+
       run = run.replace('{name}', app_name);
       write(path + '/bin/run', run, 0755);
       complete();
