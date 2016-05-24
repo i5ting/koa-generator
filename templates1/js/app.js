@@ -8,6 +8,9 @@ var app = require('koa')()
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+// error handler
+onerror(app);
+
 // global middlewares
 app.use(views('views', {
   root: __dirname + '/views',
@@ -30,11 +33,7 @@ app.use(require('koa-static')(__dirname + '/public'));
 koa.use('/', index.routes(), index.allowedMethods());
 koa.use('/users', users.routes(), users.allowedMethods());
 
-// mount root routes  
+// mount root routes
 app.use(koa.routes());
-
-app.on('error', function(err, ctx){
-  logger.error('server error', err, ctx);
-});
 
 module.exports = app;
