@@ -12,6 +12,9 @@ const logger = require('koa-logger');
 const index = require('./routes/index');
 const users = require('./routes/users');
 
+// error handler
+onerror(app);
+
 // middlewares
 app.use(convert(bodyparser));
 app.use(convert(json()));
@@ -35,11 +38,5 @@ router.use('/users', users.routes(), users.allowedMethods());
 
 app.use(router.routes(), router.allowedMethods());
 // response
-
-app.on('error', function(err, ctx){
-  console.log(err)
-  logger.error('server error', err, ctx);
-});
-
 
 module.exports = app;
