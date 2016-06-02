@@ -3,6 +3,7 @@ var app = require('koa')()
   , logger = require('koa-logger')
   , json = require('koa-json')
   , views = require('koa-views')
+  , mongoose = require('./config/mongoose.js')
   , onerror = require('koa-onerror');
 
 var index = require('./routes/index');
@@ -10,6 +11,9 @@ var users = require('./routes/users');
 
 // error handler
 onerror(app);
+
+// mongodb
+mongoose();
 
 // global middlewares
 app.use(views('views', {
@@ -19,7 +23,6 @@ app.use(views('views', {
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
-
 app.use(function *(next){
   var start = new Date;
   yield next;
