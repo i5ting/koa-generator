@@ -198,6 +198,7 @@ function createApplication(app_name, path) {
           "koa-onerror": "^1.2.1",
           "koa-router": "^5.3.0",
           "koa-static": "^1.5.2",
+          "mongoose": "^4.4.19",
           "koa-views": "^3.1.0"
       }
     }

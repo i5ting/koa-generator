@@ -8,12 +8,16 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser')();
 const logger = require('koa-logger');
+const mongoose = require('./config/mongoose.js');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
 
 // error handler
 onerror(app);
+
+// mongodb
+mongoose();
 
 // middlewares
 app.use(convert(bodyparser));
