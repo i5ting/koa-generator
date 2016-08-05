@@ -1,5 +1,4 @@
 var app = require('koa')()
-  , koa = require('koa-router')()
   , logger = require('koa-logger')
   , json = require('koa-json')
   , views = require('koa-views')
@@ -30,10 +29,7 @@ app.use(function *(next){
 app.use(require('koa-static')(__dirname + '/public'));
 
 // routes definition
-koa.use('/', index.routes(), index.allowedMethods());
-koa.use('/users', users.routes(), users.allowedMethods());
-
-// mount root routes
-app.use(koa.routes());
+app.use(index.routes(), index.allowedMethods());
+app.use(users.routes(), users.allowedMethods());
 
 module.exports = app;
