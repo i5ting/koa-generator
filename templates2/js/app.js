@@ -19,10 +19,11 @@ onerror(app);
 app.use(convert(bodyparser));
 app.use(convert(json()));
 app.use(convert(logger()));
-app.use(require('koa-static')(__dirname + '/public'));
+app.use(convert(require('koa-static')(__dirname + '/public')));
 
 app.use(views(__dirname + '/views', {
-  extension: '{views}'
+  extension: '{views}',
+  map: {'ejs': 'hogan'}
 }));
 
 // logger
