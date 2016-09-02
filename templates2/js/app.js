@@ -23,7 +23,7 @@ app.use(convert(require('koa-static')(__dirname + '/public')));
 
 app.use(views(__dirname + '/views', {
   extension: '{views}',
-  map: {'ejs': 'hogan'}
+  map: {'hjs': 'hogan'}
 }));
 
 // logger
