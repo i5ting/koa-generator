@@ -14,8 +14,8 @@ http://koajs.com/
 ## Features
 
 - Express-style
-- Support koa 1.x（已支持）
-- Support koa 2.x（已支持所有的koa中间件写法，依赖runkoa，不需要了解babel）
+- Support koa 1.x（supported）
+- Support koa 2.x（koa middleware supported,runkoa depended,no need babel）
 
 ## Installation
 
@@ -93,8 +93,8 @@ This generator can also be further configured with the following command line fl
 ## Git Branch Details
 
 - master = koa generator
-- tpl 是koa 1.x模板
-- tpl_2.x 是koa 2.x模板
+- tpl = koa 1.x template
+- tpl_2.x = koa 2.x template
 
 ## License
 
