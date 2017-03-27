@@ -1,6 +1,6 @@
 {
   "name": "koa-generator",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "fullstack koa generator for koa 1.x and 2.x",
   "main": "bin/koa",
   "scripts": {
