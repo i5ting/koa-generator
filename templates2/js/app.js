@@ -1,6 +1,5 @@
 const Koa = require('koa');
 const app = new Koa();
-const router = require('koa-router')();
 const views = require('koa-views');
 const json = require('koa-json');
 const onerror = require('koa-onerror');
@@ -31,10 +30,8 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-router.use('/', index.routes(), index.allowedMethods());
-router.use('/users', users.routes(), users.allowedMethods());
-
-app.use(router.routes(), router.allowedMethods());
-// response
+// routes
+app.use(index.routes(), index.allowedMethods());
+app.use(users.routes(), users.allowedMethods());
 
 module.exports = app;
