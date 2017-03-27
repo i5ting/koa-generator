@@ -100,7 +100,6 @@ function createApplication(app_name, path) {
   // JavaScript
   var app = loadTemplate('js/app.js');
   var www = loadTemplate('js/www');
-  var run = loadTemplate('js/run');
   var index = loadTemplate('js/routes/index.js');
   var users = loadTemplate('js/routes/users.js');
 
@@ -189,24 +188,22 @@ function createApplication(app_name, path) {
       , version: '0.1.0'
       , private: true
       , "scripts": {
-        "start":    "./node_modules/.bin/nodemon bin/run",
-        "koa":      "./node_modules/.bin/runkoa bin/www",
-        "pm2":      "pm2 start bin/run ",
-        "test":     "echo \"Error: no test specified\" && exit 1"
+        "start": "node bin/www",
+        "pm2": "pm2 start bin/www ",
+        "test": "echo \"Error: no test specified\" && exit 1"
       }
       , "dependencies": {
-        "co": "^4.6.0",
-        "debug": "^2.2.0",
-        "koa": "^2.0.0",
-        "koa-bodyparser": "^2.0.1",
+        "debug": "^2.6.3",
+        "jade": "^1.11.0",
+        "koa": "^2.2.0",
+        "koa-bodyparser": "^3.2.0",
         "koa-convert": "^1.2.0",
-        "koa-json": "^1.1.1",
-        "koa-logger": "^1.3.0",
+        "koa-json": "^2.0.2",
+        "koa-logger": "^2.0.1",
         "koa-onerror": "^1.2.1",
-        "koa-router": "^7.0.0",
-        "koa-static": "^2.0.0",
-        "koa-views": "^5.0.1",
-        "runkoa": "^1.3.1"
+        "koa-router": "^7.0.1",
+        "koa-static": "^3.0.0",
+        "koa-views": "^5.2.1"
       }
       , "devDependencies": {
         "nodemon": "^1.8.1"
@@ -260,8 +257,6 @@ function createApplication(app_name, path) {
       www = www.replace('{name}', app_name);
       write(path + '/bin/www', www, 0755);
 
-      run = run.replace('{name}', app_name);
-      write(path + '/bin/run', run, 0755);
       complete();
     });
 
