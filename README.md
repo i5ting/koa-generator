@@ -2,8 +2,6 @@
 
 http://koajs.com/
 
-
-
 [![Koa Logo](https://dl.dropboxusercontent.com/u/6396913/koa/logo.png)](http://koajs.com/)
 
 [Koa](https://www.npmjs.com/package/koa) application generator.
@@ -15,7 +13,7 @@ http://koajs.com/
 
 - Express-style
 - Support koa 1.x（已支持）
-- Support koa 2.x（已支持所有的koa中间件写法，依赖runkoa，不需要了解babel）
+- Support koa 2.x（已支持所有的koa中间件写法，需要Node.js 7.6+）
 
 ## Installation
 
