@@ -147,9 +147,10 @@ function createApplication(app_name, path) {
           copy_template('ejs/error.ejs', path + '/views/error.ejs');
           break;
         case 'jade':
-          copy_template('jade/index.jade', path + '/views/index.jade');
-          copy_template('jade/layout.jade', path + '/views/layout.jade');
-          copy_template('jade/error.jade', path + '/views/error.jade');
+        case 'pug':
+          copy_template('jade/index.pug', path + '/views/index.pug');
+          copy_template('jade/layout.pug', path + '/views/layout.pug');
+          copy_template('jade/error.pug', path + '/views/error.pug');
           break;
         case 'hjs':
           copy_template('hogan/index.hjs', path + '/views/index.hjs');
@@ -195,7 +196,6 @@ function createApplication(app_name, path) {
       }
       , "dependencies": {
         "debug": "^2.6.3",
-        "jade": "^1.11.0",
         "koa": "^2.2.0",
         "koa-bodyparser": "^3.2.0",
         "koa-convert": "^1.2.0",
@@ -214,7 +214,8 @@ function createApplication(app_name, path) {
     // Template support
     switch (program.template) {
       case 'jade':
-        pkg.dependencies['jade'] = '~1.11.0';
+      case 'pug':
+        pkg.dependencies['pug'] = '^2.0.0-rc.1';
         break;
       case 'ejs':
         pkg.dependencies['ejs'] = '~2.3.3';
@@ -343,7 +344,7 @@ function main() {
   var appName = path.basename(path.resolve(destinationPath));
 
   // Template engine
-  program.template = 'jade';
+  program.template = 'pug';
   if (program.ejs) program.template = 'ejs';
   if (program.hogan) program.template = 'hjs';
   if (program.hbs) program.template = 'hbs';
