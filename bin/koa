@@ -187,7 +187,12 @@ function createApplication(app_name, path) {
         name: app_name
       , version: '0.1.0'
       , private: true
-      , scripts: { start: 'node ./bin/www' }
+      , scripts: { 
+        "start": "node bin/www",
+        "dev": "./node_modules/.bin/nodemon bin/www",
+        "prd": "pm2 start bin/www",
+        "test": "echo \"Error: no test specified\" && exit 1"
+       }
       , dependencies: {
         "co": "^4.6.0",
         "debug": "^2.6.3",
@@ -200,6 +205,8 @@ function createApplication(app_name, path) {
         "koa-router": "^5.4.0",
         "koa-static": "^1.5.2",
         "koa-views": "^3.1.0"
+      }, devDependencies: {
+        "nodemon": "^1.8.1"
       }
     }
 
