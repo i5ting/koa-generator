@@ -29,6 +29,7 @@ program
   .usage('[options] [dir]')
   .option('-e, --ejs', 'add ejs engine support (defaults to jade)')
   .option('    --hbs', 'add handlebars engine support')
+  .option('-n, --nunjucks', 'add nunjucks engine support')
   .option('-H, --hogan', 'add hogan.js engine support')
   .option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus|compass|sass) (defaults to plain css)')
   .option('    --git', 'add .gitignore')
@@ -146,6 +147,11 @@ function createApplication(app_name, path) {
           copy_template('ejs/index.ejs', path + '/views/index.ejs');
           copy_template('ejs/error.ejs', path + '/views/error.ejs');
           break;
+        case 'nunjucks':
+          copy_template('nunjucks/index.nunjucks', path + '/views/index.nunjucks');
+          copy_template('nunjucks/layout.nunjucks', path + '/views/layout.nunjucks');
+          copy_template('nunjucks/error.nunjucks', path + '/views/error.nunjucks');
+          break;
         case 'jade':
         case 'pug':
           copy_template('jade/index.pug', path + '/views/index.pug');
@@ -219,6 +225,9 @@ function createApplication(app_name, path) {
         break;
       case 'ejs':
         pkg.dependencies['ejs'] = '~2.3.3';
+        break;
+      case 'nunjucks':
+        pkg.dependencies['nunjucks'] = '~3.0.0 ';
         break;
       case 'hjs':
         pkg.dependencies['hjs'] = '~0.0.6';
@@ -346,8 +355,10 @@ function main() {
   // Template engine
   program.template = 'pug';
   if (program.ejs) program.template = 'ejs';
+  if (program.jade) program.template = 'pug';
   if (program.hogan) program.template = 'hjs';
   if (program.hbs) program.template = 'hbs';
+  if (program.nunjucks) program.template = 'nunjucks';
 
   // Generate application
   emptyDirectory(destinationPath, function (empty) {
