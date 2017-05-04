@@ -27,7 +27,7 @@ before(program, 'outputHelp', function () {
 program
   .version(version)
   .usage('[options] [dir]')
-  .option('-e, --ejs', 'add ejs engine support (defaults to jade)')
+  .option('-e, --ejs', 'add ejs engine support (defaults to pug/jade)')
   .option('    --hbs', 'add handlebars engine support')
   .option('-n, --nunjucks', 'add nunjucks engine support')
   .option('-H, --hogan', 'add hogan.js engine support')
