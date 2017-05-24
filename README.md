@@ -2,7 +2,7 @@
 
 http://koajs.com/
 
-[![Koa Logo](https://dl.dropboxusercontent.com/u/6396913/koa/logo.png)](http://koajs.com/)
+<img src='https://dl.dropboxusercontent.com/u/6396913/koa/logo.png)' width='300'/>
 
 [Koa](https://www.npmjs.com/package/koa) application generator.
 
