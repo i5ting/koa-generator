@@ -14,6 +14,7 @@ http://koajs.com/
 - Express-style
 - Support koa 1.x（supported）
 - Support koa 2.x（koa middleware supported,need Node.js 7.6+ ,babel optional）
+- Support koa 2.x es6 style（koa middleware supported,need Node.js 7.6+ ,babel optional）
 
 ## Installation
 
@@ -25,6 +26,30 @@ with 2 commands
 
 - koa (Support koa 1.x)
 - koa2 (Support koa 2.x)
+- koa2-es6 (Support koa 2.x es6 style)
+
+## Quick Start 2.x ES6
+The quickest way to get started with koa is to utilize the executable `koa2(1)` to generate an application as shown below:
+
+Create the app:
+
+```bash
+$ koa2-es6 /tmp/foo && cd /tmp/foo
+```
+
+Install dependencies:
+
+```bash
+$ npm install
+```
+
+Rock and Roll
+
+```bash
+$ npm start
+```
+
+more detail see [koa2-es6-demo](https://github.com/panmin/koa2-es6-demo)
 
 ## Quick Start 1.x
 
@@ -94,6 +119,7 @@ This generator can also be further configured with the following command line fl
 - master = koa generator
 - tpl = koa 1.x template
 - tpl_2.x = koa 2.x template
+
 
 ## License
 

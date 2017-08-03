@@ -1,0 +1,473 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var mkdirp = require('mkdirp');
+var os = require('os');
+var fs = require('fs');
+var path = require('path');
+var readline = require('readline');
+var sortedObject = require('sorted-object');
+
+var _exit = process.exit;
+var eol = os.EOL;
+var pkg = require('../package.json');
+
+var version = pkg.version;
+
+// Re-assign process.exit because of commander
+// TODO: Switch to a different command framework
+process.exit = exit
+
+// CLI
+
+before(program, 'outputHelp', function () {
+  this.allowUnknownOption();
+});
+
+program
+  .version(version)
+  .usage('[options] [dir]')
+  .option('-e, --ejs', 'add ejs engine support (defaults to pug/jade)')
+  .option('    --hbs', 'add handlebars engine support')
+  .option('-n, --nunjucks', 'add nunjucks engine support')
+  .option('-H, --hogan', 'add hogan.js engine support')
+  .option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus|compass|sass) (defaults to plain css)')
+  .option('    --git', 'add .gitignore')
+  .option('-f, --force', 'force on non-empty directory')
+  .parse(process.argv);
+
+if (!exit.exited) {
+  main();
+}
+
+/**
+ * Install a before function; AOP.
+ */
+
+function before(obj, method, fn) {
+  var old = obj[method];
+
+  obj[method] = function () {
+    fn.call(this);
+    old.apply(this, arguments);
+  };
+}
+
+/**
+ * Prompt for confirmation on STDOUT/STDIN
+ */
+
+function confirm(msg, callback) {
+  var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question(msg, function (input) {
+    rl.close();
+    callback(/^y|yes|ok|true$/i.test(input));
+  });
+}
+
+/**
+ * Create application at the given directory `path`.
+ *
+ * @param {String} path
+ */
+
+function createApplication(app_name, path) {
+  var wait = 5;
+
+  console.log();
+  function complete() {
+    if (--wait) return;
+    var prompt = launchedFromCmd() ? '>' : '$';
+
+    console.log();
+    console.log('   install dependencies:');
+    console.log('     %s cd %s && npm install', prompt, path);
+    console.log();
+    console.log('   run the app:');
+
+    if (launchedFromCmd()) {
+      console.log('     %s SET DEBUG=koa* & npm start', prompt, app_name);
+    } else {
+      console.log('     %s DEBUG=%s:* npm start', prompt, app_name);
+    }
+
+    console.log();
+  }
+
+  // JavaScript
+  var babelrc = loadTemplate('js/.babelrc');
+  var app = loadTemplate('js/app.js');
+  var www = loadTemplate('js/www');
+  var index_home = loadTemplate('js/index.js');
+
+  var tools_common = loadTemplate('js/common/tools.js');
+
+  var config = loadTemplate('js/config/config.js');
+  var mongo_config = loadTemplate('js/config/mongo_config.js');
+  var redis_config = loadTemplate('js/config/redis_config.js');
+
+  var userCtrl = loadTemplate('js/controller/user.js');
+
+  var mongo_db = loadTemplate('js/db/mongo.js');
+  var redis_db = loadTemplate('js/db/redis.js');
+
+  var tools_mid = loadTemplate('js/middlewares/tools.js');
+
+  var user_model = loadTemplate('js/models/user.js');
+
+  var index = loadTemplate('js/routes/index.js');
+  var users = loadTemplate('js/routes/user.js');
+
+  // CSS
+  var css = loadTemplate('css/style.css');
+  var less = loadTemplate('css/style.less');
+  var stylus = loadTemplate('css/style.styl');
+  var compass = loadTemplate('css/style.scss');
+  var sass = loadTemplate('css/style.sass');
+
+  mkdir(path, function(){
+    mkdir(path + '/public');
+    mkdir(path + '/public/javascripts');
+    mkdir(path + '/public/images');
+    mkdir(path + '/public/stylesheets', function(){
+      switch (program.css) {
+        case 'less':
+          write(path + '/public/stylesheets/style.less', less);
+          break;
+        case 'stylus':
+          write(path + '/public/stylesheets/style.styl', stylus);
+          break;
+        case 'compass':
+          write(path + '/public/stylesheets/style.scss', compass);
+          break;
+        case 'sass':
+          write(path + '/public/stylesheets/style.sass', sass);
+          break;
+        default:
+          write(path + '/public/stylesheets/style.css', css);
+      }
+      complete();
+    });
+
+    mkdir(path + '/common', function(){
+      write(path + '/common/tools.js', tools_common);
+      complete();
+    });
+
+    mkdir(path + '/config', function(){
+      write(path + '/config/config.js', config);
+      write(path + '/config/mongo_config.js', mongo_config);
+      write(path + '/config/redis_config.js', redis_config);
+      complete();
+    });
+
+    mkdir(path + '/controller', function(){
+      write(path + '/controller/user.js', userCtrl);
+      complete();
+    });
+
+    mkdir(path + '/db', function(){
+      write(path + '/db/mongo.js', mongo_db);
+      write(path + '/db/redis.js', redis_db);
+      complete();
+    });
+
+
+    mkdir(path + '/middlewares', function(){
+      write(path + '/middlewares/tools.js', tools_mid);
+      complete();
+    });
+
+    mkdir(path + '/models', function(){
+      write(path + '/models/user.js', user_model);
+      complete();
+    });
+
+    mkdir(path + '/routes', function(){
+      write(path + '/routes/index.js', index);
+      write(path + '/routes/user.js', users);
+      complete();
+    });
+
+    mkdir(path + '/views', function(){
+      switch (program.template) {
+        case 'ejs':
+          copy_template('ejs/index.ejs', path + '/views/index.ejs');
+          copy_template('ejs/error.ejs', path + '/views/error.ejs');
+          break;
+        case 'nunjucks':
+          copy_template('nunjucks/index.nunjucks', path + '/views/index.nunjucks');
+          copy_template('nunjucks/layout.nunjucks', path + '/views/layout.nunjucks');
+          copy_template('nunjucks/error.nunjucks', path + '/views/error.nunjucks');
+          break;
+        case 'jade':
+        case 'pug':
+          copy_template('jade/index.pug', path + '/views/index.pug');
+          copy_template('jade/layout.pug', path + '/views/layout.pug');
+          copy_template('jade/error.pug', path + '/views/error.pug');
+          break;
+        case 'hjs':
+          copy_template('hogan/index.hjs', path + '/views/index.hjs');
+          copy_template('hogan/error.hjs', path + '/views/error.hjs');
+          break;
+        case 'hbs':
+          copy_template('hbs/index.hbs', path + '/views/index.hbs');
+          copy_template('hbs/layout.hbs', path + '/views/layout.hbs');
+          copy_template('hbs/error.hbs', path + '/views/error.hbs');
+          break;
+      }
+      complete();
+    });
+
+    // CSS Engine support
+    switch (program.css) {
+      case 'less':
+        app = app.replace('{css}', eol + 'app.use(require(\'less-middleware\')(path.join(__dirname, \'public\')));');
+        break;
+      case 'stylus':
+        app = app.replace('{css}', eol + 'app.use(require(\'stylus\').middleware(path.join(__dirname, \'public\')));');
+        break;
+      case 'compass':
+        app = app.replace('{css}', eol + 'app.use(require(\'node-compass\')({mode: \'expanded\'}));');
+        break;
+      case 'sass':
+        app = app.replace('{css}', eol + 'app.use(require(\'node-sass-middleware\')({\n  src: path.join(__dirname, \'public\'),\n  dest: path.join(__dirname, \'public\'),\n  indentedSyntax: true,\n  sourceMap: true\n}));');
+        break;
+      default:
+        app = app.replace('{css}', '');
+    }
+
+    // package.json
+    var pkg = {
+        name: app_name
+      , version: '0.1.0'
+      , private: true
+      , "scripts": {
+        "start": "babel-node index.js",
+        "dev": "cross-env NODE_ENV=development supervisor --harmony index.js",
+        "pmStart": "cross-env NODE_ENV=production pm2 start index.js --node-args='--harmony' --name '"+app_name+"'",
+        "pmStop": "cross-env NODE_ENV=production pm2 stop index.js --name '"+app_name+"'",
+        "pmRestart": "cross-env NODE_ENV=production pm2 restart index.js --node-args='--harmony' --name '"+app_name+"'",
+        "test": "echo \"Error: no test specified\" && exit 1"
+      }
+      , "dependencies": {
+        "babel": "^6.23.0",
+        "babel-cli": "^6.24.1",
+        "babel-core": "^6.25.0",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-stage-3": "^6.22.0",
+        "babel-register": "^6.24.0",
+        "cross-env": "^5.0.1",
+        "debug": "^2.6.3",
+        "koa": "^2.3.0",
+        "koa-bodyparser": "^4.2.0",
+        "koa-json": "^2.0.2",
+        "koa-logger": "^2.0.1",
+        "koa-onerror": "^1.2.1",
+        "koa-router": "^7.2.1",
+        "koa-static": "^3.0.0",
+        "koa-views": "^5.2.1",
+        "mongoose": "^4.11.5",
+        "redis": "^2.7.1"
+      }
+      , "devDependencies": {
+        "babel-plugin-transform-async-to-generator": "^6.24.1",
+        "babel-plugin-transform-es2015-classes": "^6.24.1",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+        "babel-plugin-transform-export-extensions": "^6.22.0"
+      }
+    }
+
+    // Template support
+    switch (program.template) {
+      case 'jade':
+      case 'pug':
+        pkg.dependencies['pug'] = '^2.0.0-rc.1';
+        break;
+      case 'ejs':
+        pkg.dependencies['ejs'] = '~2.3.3';
+        break;
+      case 'nunjucks':
+        pkg.dependencies['nunjucks'] = '~3.0.0 ';
+        break;
+      case 'hjs':
+        pkg.dependencies['hjs'] = '~0.0.6';
+        break;
+      case 'hbs':
+        pkg.dependencies['handlebars'] = '~4.0.5';
+        app = app.replace('\'{views}\'', '\'{views}\',\n  map: { hbs: \'handlebars\' }');
+        break;
+      default:
+    }
+
+    app = app.replace('{views}', program.template);
+
+    // CSS Engine support
+    switch (program.css) {
+      case 'less':
+        pkg.dependencies['less-middleware'] = '1.0.x';
+        break;
+      case 'compass':
+        pkg.dependencies['node-compass'] = '0.2.3';
+        break;
+      case 'stylus':
+        pkg.dependencies['stylus'] = '0.42.3';
+        break;
+      case 'sass':
+        pkg.dependencies['node-sass-middleware'] = '0.8.0';
+        break;
+      default:
+    }
+
+    // sort dependencies like npm(1)
+    pkg.dependencies = sortedObject(pkg.dependencies);
+
+    // write files
+    write(path + '/package.json', JSON.stringify(pkg, null, 2));
+    write(path + '/.babelrc', babelrc);
+    write(path + '/index.js', index_home);
+    write(path + '/app.js', app);
+    mkdir(path + '/bin', function(){
+      www = www.replace('{name}', app_name);
+      write(path + '/bin/www', www, 0755);
+
+      complete();
+    });
+
+    if (program.git) {
+      write(path + '/.gitignore', fs.readFileSync(__dirname + '/../templates3/js/gitignore', 'utf-8'));
+    }
+
+    complete();
+  });
+}
+
+function copy_template(from, to) {
+  from = path.join(__dirname, '..', 'templates3', from);
+  write(to, fs.readFileSync(from, 'utf-8'));
+}
+
+/**
+ * Check if the given directory `path` is empty.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+
+function emptyDirectory(path, fn) {
+  fs.readdir(path, function(err, files){
+    if (err && 'ENOENT' != err.code) throw err;
+    fn(!files || !files.length);
+  });
+}
+
+/**
+ * Graceful exit for async STDIO
+ */
+
+function exit(code) {
+  // flush output for Node.js Windows pipe bug
+  // https://github.com/joyent/node/issues/6247 is just one bug example
+  // https://github.com/visionmedia/mocha/issues/333 has a good discussion
+  function done() {
+    if (!(draining--)) _exit(code);
+  }
+
+  var draining = 0;
+  var streams = [process.stdout, process.stderr];
+
+  exit.exited = true;
+
+  streams.forEach(function(stream){
+    // submit empty write request and wait for completion
+    draining += 1;
+    stream.write('', done);
+  });
+
+  done();
+}
+
+/**
+ * Determine if launched from cmd.exe
+ */
+
+function launchedFromCmd() {
+  return process.platform === 'win32'
+    && process.env._ === undefined;
+}
+
+/**
+ * Load template file.
+ */
+
+function loadTemplate(name) {
+  return fs.readFileSync(path.join(__dirname, '..', 'templates3', name), 'utf-8');
+}
+
+/**
+ * Main program.
+ */
+
+function main() {
+  // Path
+  var destinationPath = program.args.shift() || '.';
+
+  // App name
+  var appName = path.basename(path.resolve(destinationPath));
+
+  // Template engine
+  program.template = 'pug';
+  if (program.ejs) program.template = 'ejs';
+  if (program.jade) program.template = 'pug';
+  if (program.hogan) program.template = 'hjs';
+  if (program.hbs) program.template = 'hbs';
+  if (program.nunjucks) program.template = 'nunjucks';
+
+  // Generate application
+  emptyDirectory(destinationPath, function (empty) {
+    if (empty || program.force) {
+      createApplication(appName, destinationPath);
+    } else {
+      confirm('destination is not empty, continue? [y/N] ', function (ok) {
+        if (ok) {
+          process.stdin.destroy();
+          createApplication(appName, destinationPath);
+        } else {
+          console.error('aborting');
+          exit(1);
+        }
+      });
+    }
+  });
+}
+
+/**
+ * echo str > path.
+ *
+ * @param {String} path
+ * @param {String} str
+ */
+
+function write(path, str, mode) {
+  fs.writeFileSync(path, str, { mode: mode || 0666 });
+  console.log('   \x1b[36mcreate\x1b[0m : ' + path);
+}
+
+/**
+ * Mkdir -p.
+ *
+ * @param {String} path
+ * @param {Function} fn
+ */
+
+function mkdir(path, fn) {
+  mkdirp(path, 0755, function(err){
+    if (err) throw err;
+    console.log('   \033[36mcreate\033[0m : ' + path);
+    fn && fn();
+  });
+}
