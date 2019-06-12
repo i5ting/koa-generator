@@ -24,14 +24,14 @@
   },
   "homepage": "https://github.com/17koa/koa-generator#readme",
   "dependencies": {
-    "commander": "2.7.1",
+    "commander": "2.20.0",
     "mkdirp": "0.5.1",
-    "sorted-object": "1.0.0"
+    "sorted-object": "2.0.1"
   },
   "devDependencies": {
-    "mocha": "2.2.5",
-    "rimraf": "~2.2.8",
-    "supertest": "1.0.1"
+    "mocha": "6.1.4",
+    "rimraf": "~2.6.3",
+    "supertest": "4.0.2"
   },
   "engines": {
     "node": ">= 4.0"
