@@ -1,5 +1,7 @@
 # koa-generator
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ykfe/koa-generator.svg)](https://greenkeeper.io/)
+
 http://koajs.com/
 
 [Koa](https://www.npmjs.com/package/koa) application generator.
