@@ -33,8 +33,8 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+app.use(index.routes()).use(index.allowedMethods())
+app.use(users.routes()).use(users.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
