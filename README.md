@@ -31,7 +31,7 @@ The quickest way to get started with koa is to utilize the executable `koa(1)` t
 Create the app:
 
 ```bash
-$ koa /tmp/foo && cd /tmp/foo
+$ koa
 ```
 
 Install dependencies:
