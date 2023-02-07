@@ -1,5 +1,5 @@
 var walk = require("walkdir");
-var flat = require("./flat");
+var flat = require("./flat.mjs");
 
 // async with path callback
 export function tpl(path, depth) {

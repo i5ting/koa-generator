@@ -1,8 +1,13 @@
 import config from "./const.json";
-import dclone from "./dclone";
-import walk from "./walk";
-import tpl from "./tpl";
+import { clone } from "./clone";
+import walk from "./walk.mjs";
+import tpl from "./tpl.mjs";
 import fs from "fs";
+
+export * from "./clone";
+export * from "./tpl";
+export * from "./flat";
+export * from "./walk";
 
 export async function add(pageName, option) {
   const repo = config.repo;
@@ -12,7 +17,7 @@ export async function add(pageName, option) {
 
   // 通过dclone稀疏索引，将目录内容下载下来
   // TODO：此处需要确认，是否需要将下载的内容移动到其他目录
-  await dclone(dir);
+  await clone(dir);
 
   // 通过walk，获得目录下面的所有文件，flat之后，变成数据
   // 注意，walk是同步方法，此处不需要await

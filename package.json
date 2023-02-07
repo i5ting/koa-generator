@@ -5,7 +5,7 @@
   "main": "bin/koa",
   "scripts": {
     "start": "npm publish .",
-    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "test": "uvu",
     "test-ci": "mocha --reporter spec --check-leaks test/"
   },
   "preferGlobal": true,
@@ -25,20 +25,20 @@
   "homepage": "https://github.com/17koa/koa-generator#readme",
   "dependencies": {
     "commander": "2.20.0",
-    "mkdirp": "0.5.1",
-    "sorted-object": "2.0.1",
     "dclone": "^1.4.2",
     "debug": "^4.3.4",
     "ejs": "^3.1.8",
     "flat": "^5.0.2",
-    "node-walkdir": "^1.0.0"
+    "mkdirp": "0.5.1",
+    "node-walkdir": "^1.0.0",
+    "sorted-object": "2.0.1"
   },
   "devDependencies": {
-    "mocha": "6.1.4",
     "rimraf": "~2.6.3",
-    "supertest": "4.0.2"
+    "supertest": "4.0.2",
+    "uvu": "^0.5.6"
   },
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 14.0"
   }
 }
