@@ -26,7 +26,12 @@
   "dependencies": {
     "commander": "2.20.0",
     "mkdirp": "0.5.1",
-    "sorted-object": "2.0.1"
+    "sorted-object": "2.0.1",
+    "dclone": "^1.4.2",
+    "debug": "^4.3.4",
+    "ejs": "^3.1.8",
+    "flat": "^5.0.2",
+    "node-walkdir": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "6.1.4",
